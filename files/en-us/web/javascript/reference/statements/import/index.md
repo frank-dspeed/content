@@ -24,8 +24,8 @@ used in embedded scripts unless such script has a `type="module"`. Bindings
 imported are called live bindings because they are updated by the module that exported
 the binding.
 
-There is also a function-like dynamic **`import()`**, which
-does not require scripts of `type="module"`.
+There is also a dynamic **`import()`** function, which
+does allow to import modules inside <script> tags.
 
 Backward compatibility can be ensured using attribute `nomodule` on the
 {{HTMLElement("script")}} tag.
@@ -185,7 +185,7 @@ returned object.
 ```js
 (async () => {
   if (somethingIsTrue) {
-    const { default: myDefault, foo, bar } = await import('/modules/my-module.js');
+    const myDefault = (await import('/modules/my-module.js')).default;
   }
 })();
 ```
@@ -209,9 +209,8 @@ reasons why you might need to use dynamic import:
   effects unless some condition is true. (It is recommended not to have any side effects
   in a module, but you sometimes cannot control this in your module dependencies.)
 
-Use dynamic import only when necessary. The static form is preferable for loading
-initial dependencies, and can benefit more readily from static analysis tools and [tree shaking](/en-US/docs/Glossary/Tree_shaking).
-
+Use dynamic import only when necessary or when your using a old NodeJS package that forces you to run inside a CommonJS Context. 
+  
 To dynamically import a module, the `import` keyword may be called as a
 function. When used this way, it returns a promise.
 
